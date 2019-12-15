@@ -18,6 +18,7 @@ pair_coeff 1 1 lj/cut    0.025  0.2
 pair_coeff 2 2 dpd 25 90.0
 pair_coeff 1 2 dpd/tstat 90.0
 ##Ref https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1005173
+##Ref https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4267858/pdf/nihms-625861.pdf
 ##dpd need ghost velocity
 comm_modify vel yes
 timestep 0.0001
