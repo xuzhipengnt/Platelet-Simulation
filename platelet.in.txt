@@ -13,10 +13,11 @@ group flow     type 2
 velocity flow create ${T} 1233446 dist gaussian
 pair_style hybrid/overlay lj/cut 1.0 dpd 1.0 1.5 4232421 dpd/tstat 1.0 1.0 1.5 342333
 ##particle-particle in platelet
-pair_coeff 1 1 lj/cut    0.025  0.188
+pair_coeff 1 1 lj/cut    0.025  0.2
 ##dpd particle in flow
-pair_coeff 2 2 dpd 25 66.0
-pair_coeff 1 2 dpd/tstat 66.0
+pair_coeff 2 2 dpd 25 90.0
+pair_coeff 1 2 dpd/tstat 90.0
+##Ref https://journals.plos.org/ploscompbiol/article?id=10.1371/journal.pcbi.1005173
 ##dpd need ghost velocity
 comm_modify vel yes
 timestep 0.0001
