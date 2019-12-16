@@ -1,0 +1,51 @@
+variable        T equal 310
+#Basic parameters
+units           lj     
+dimension       3
+boundary        p p p
+atom_style      full
+neighbor        0.5   bin
+read_data data3.txt
+mass   1	1.0
+mass   2  	1.0
+mass   3	1.0
+mass   4        2.2
+group platelet1 type 1
+group platelet2 type 2
+group platelet3 type 3
+group flow     type 4
+velocity flow create ${T} 1234546 dist gaussian
+velocity flow ramp vz -10.0 10.0 y -52.0 52.0
+pair_style hybrid/overlay lj/cut 1.0 dpd 1.0 1.7 423421 dpd/tstat 1.0 1.0 1.7 34333
+##particle-particle in platelet
+pair_coeff 1 1 lj/cut    0.025  0.20
+pair_coeff 2 2 lj/cut    0.025  0.20
+pair_coeff 3 3 lj/cut    0.025  0.20
+pair_coeff 1 2 lj/cut    0.025  0.25
+pair_coeff 1 3 lj/cut    0.025  0.25
+pair_coeff 2 3  lj/cut   0.025  0.25
+#pair_coeff * *  lj/cut   0.025  0.25
+#pair_coeff 1 4 lj/cut  0.025  0.16
+##dpd particle in flow
+pair_coeff 4 4 dpd 25 50.0
+pair_coeff 1 4 dpd/tstat 50.0
+pair_coeff 2 4 dpd/tstat 50.0
+pair_coeff 3 4 dpd/tstat 50.0
+##dpd need ghost velocity
+comm_modify vel yes
+timestep 0.0001
+fix 1 platelet1 rigid/nve molecule
+fix 2 platelet2 rigid/nve molecule
+fix 3 platelet3 rigid/nve molecule
+fix 4 flow nvt temp 300.0 310.0 100.0
+#fix 5 flow addforce 0.0 0.0 1.0
+dump            1 all xyz 5000 all.xyz
+dump    4 platelet1 xyz 5000 p1.xyz
+dump	2 platelet2 xyz 5000 p2.xyz
+dump 	3 platelet3 xyz 5000 p3.xyz
+thermo          10000
+thermo_style    custom step temp press density vol
+thermo_modify   flush yes
+#thermo_modify lost ignore flush yes
+run 800000
+
